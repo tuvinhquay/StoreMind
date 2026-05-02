@@ -1,0 +1,18 @@
+import type { NextConfig } from "next";
+import withPWA from "next-pwa";
+
+/**
+ * BƯỚC 8 — CẤU HÌNH PWA
+ */
+const withPWAConfig = withPWA({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  skipWaiting: true,
+});
+
+const nextConfig: NextConfig = {
+  turbopack: {},
+};
+
+export default withPWAConfig(nextConfig);
