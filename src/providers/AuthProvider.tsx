@@ -8,30 +8,86 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect } from "react";
+import type { AppUser } from "@/modules/auth/types";
+import { onAuthStateChanged, signInWithGoogle, logout as firebaseLogout } from "@/modules/auth/auth.service";
+import { createTenantIfNeeded } from "@/modules/auth/createTenantIfNeeded";
 
 interface AuthContextType {
-  user: { uid: string; email?: string } | null;
+  user: AppUser | null;
   tenantId: string | null;
   loading: boolean;
+  loginWithGoogle: () => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<{ uid: string; email?: string } | null>(
-    null
-  );
+  const [user, setUser] = useState<AppUser | null>(null);
   const [tenantId, setTenantId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // TODO: Implement authentication check with Firebase
-    // For now, just set loading to false
-    setLoading(false);
+    const unsubscribe = onAuthStateChanged(async (firebaseUser) => {
+      if (!firebaseUser) {
+        setUser(null);
+        setTenantId(null);
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const tenantId = await createTenantIfNeeded(firebaseUser);
+        const resolvedTenantId = tenantId ?? "";
+        setTenantId(resolvedTenantId);
+        setUser({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email ?? "",
+          name: firebaseUser.displayName ?? "",
+          photoURL: firebaseUser.photoURL ?? undefined,
+          tenantId: resolvedTenantId,
+        });
+      } catch (error) {
+        console.error("AuthProvider error creating tenant:", error);
+        setUser({
+          uid: firebaseUser.uid,
+          email: firebaseUser.email ?? "",
+          name: firebaseUser.displayName ?? "",
+          photoURL: firebaseUser.photoURL ?? undefined,
+          tenantId: "",
+        });
+      } finally {
+        setLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
+  async function loginWithGoogle() {
+    setLoading(true);
+    try {
+      await signInWithGoogle();
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function logout() {
+    setLoading(true);
+    try {
+      await firebaseLogout();
+    } finally {
+      setLoading(false);
+      setUser(null);
+      setTenantId(null);
+    }
+  }
+
   return (
-    <AuthContext.Provider value={{ user, tenantId, loading }}>
+    <AuthContext.Provider
+      value={{ user, tenantId, loading, loginWithGoogle, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );
