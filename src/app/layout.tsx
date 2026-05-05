@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { ReactQueryProvider } from "@/providers/ReactQueryProvider";
+import VideoBackground from "@/components/VideoBackground";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,9 +40,12 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-screen flex flex-col bg-black">
         <AuthProvider>
-          <ReactQueryProvider>{children}</ReactQueryProvider>
+          <ReactQueryProvider>
+            <VideoBackground />
+            {children}
+          </ReactQueryProvider>
         </AuthProvider>
       </body>
     </html>

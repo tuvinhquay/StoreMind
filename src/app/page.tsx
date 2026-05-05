@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/modules/auth/useAuth";
@@ -20,9 +21,19 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-6">
-      <div className="w-full max-w-md rounded-3xl bg-white/95 p-10 shadow-xl ring-1 ring-slate-200">
+    <div className="relative min-h-screen flex items-center justify-center px-6">
+      <div className="w-full max-w-md rounded-3xl bg-white/80 backdrop-blur-md p-10 shadow-2xl border border-white/20">
         <div className="text-center">
+          <div className="mx-auto mb-6 h-24 w-24 overflow-hidden rounded-full bg-slate-950/10">
+            <Image
+              src="/assets/images/logo.png"
+              alt="StoreMind logo"
+              width={96}
+              height={96}
+              priority
+              className="object-contain"
+            />
+          </div>
           <h1 className="text-4xl font-bold text-slate-900 mb-3">StoreMind</h1>
           <p className="text-lg text-slate-600 mb-8">
             Đăng nhập để quản lý cửa hàng của bạn.
