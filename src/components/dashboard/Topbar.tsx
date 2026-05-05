@@ -7,28 +7,30 @@ export function Topbar() {
   const initials = user?.name ? user.name.charAt(0).toUpperCase() : "U";
 
   return (
-    <header className="flex items-center justify-between gap-4 border-b border-white/15 bg-black/20 backdrop-blur-2xl px-8 py-4 text-white">
-      <div>
-        <p className="text-sm text-slate-300">Tenant ID</p>
-        <p className="text-base font-semibold text-white">{tenantId ?? "Chưa xác định"}</p>
-      </div>
-      <div className="flex items-center gap-4">
-        <div className="flex items-center gap-3 rounded-2xl bg-white/10 backdrop-blur-sm px-4 py-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 text-white font-semibold">
-            {initials}
-          </div>
-          <div>
-            <p className="text-sm font-semibold text-white">{user?.name ?? "Người dùng"}</p>
-            <p className="text-xs text-slate-300">{user?.email ?? "Không có email"}</p>
-          </div>
+    <header className="glass-effect-strong backdrop-blur-2xl border-b border-white/10 px-8 py-4 text-white">
+      <div className="flex items-center justify-between gap-6">
+        <div className="min-w-0">
+          <p className="text-xs uppercase tracking-widest text-slate-400/70">Tenant</p>
+          <p className="mt-1 text-base font-semibold truncate text-slate-100">{tenantId ?? "Loading..."}</p>
         </div>
-        <button
-          type="button"
-          onClick={logout}
-          className="rounded-2xl bg-white/20 hover:bg-white/30 px-4 py-3 text-sm font-semibold text-white transition-all backdrop-blur-sm border border-white/20"
-        >
-          Logout
-        </button>
+        <div className="flex items-center gap-4">
+          <div className="glass-effect rounded-2xl px-5 py-3 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 text-sm font-bold text-slate-900 shadow-lg shadow-cyan-400/30">
+              {initials}
+            </div>
+            <div className="hidden sm:block">
+              <p className="text-sm font-medium leading-tight text-white">{user?.name ?? "User"}</p>
+              <p className="text-xs text-slate-300/70 truncate max-w-xs">{user?.email ?? "email@example.com"}</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={logout}
+            className="glass-effect rounded-2xl px-5 py-3 text-sm font-medium text-white transition-all duration-300 hover:glass-effect-strong hover:shadow-md hover:shadow-blue-400/10"
+          >
+            Logout
+          </button>
+        </div>
       </div>
     </header>
   );

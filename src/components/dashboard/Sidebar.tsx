@@ -15,33 +15,43 @@ export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-72 min-h-screen bg-black/30 backdrop-blur-2xl border-r border-white/15 text-white">
-      <div className="px-8 py-8">
-        <div className="mb-8">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-400 to-cyan-400 text-xl font-bold text-slate-900 shadow-lg shadow-cyan-400/50">
+    <aside className="w-72 min-h-screen glass-effect-strong backdrop-blur-3xl border-r border-white/10 text-white flex flex-col">
+      <div className="px-6 py-8 border-b border-white/5">
+        <div className="mb-6">
+          <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-gradient-to-br from-blue-400 via-cyan-400 to-emerald-400 text-2xl font-bold text-slate-950 shadow-xl shadow-cyan-400/40 animate-card-in">
             SM
           </div>
-          <h1 className="mt-4 text-2xl font-semibold">StoreMind</h1>
-          <p className="mt-1 text-sm text-slate-300">SaaS store dashboard</p>
+          <h1 className="mt-4 text-2xl font-bold tracking-tight">StoreMind</h1>
+          <p className="mt-1 text-sm text-slate-300/80">SaaS Dashboard</p>
         </div>
-        <nav className="space-y-2">
-          {menu.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`block rounded-2xl px-4 py-3 text-sm font-medium transition-all duration-300 ${
-                  isActive
-                    ? "bg-gradient-to-r from-blue-500/40 to-cyan-500/40 border border-white/30 shadow-lg shadow-cyan-400/20"
-                    : "text-slate-100 hover:bg-white/20 hover:shadow-lg hover:shadow-blue-500/20"
-                }`}
-              >
+      </div>
+      <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+        {menu.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`group relative block rounded-2xl px-5 py-3 text-sm font-medium transition-all duration-300 ${
+                isActive
+                  ? "glass-effect-strong shadow-lg shadow-blue-500/20 border-white/20 animate-menu-active"
+                  : "text-slate-200/90 hover:glass-effect hover:border-white/15 hover:shadow-md hover:shadow-blue-400/10"
+              }`}
+            >
+              <span className={`relative z-10 ${isActive ? "text-white" : "group-hover:text-white"}`}>
                 {item.label}
-              </Link>
-            );
-          })}
-        </nav>
+              </span>
+              {isActive && (
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-blue-500/20 to-cyan-500/10 -z-0" />
+              )}
+            </Link>
+          );
+        })}
+      </nav>
+      <div className="px-4 py-6 border-t border-white/5">
+        <div className="glass-effect rounded-2xl p-4 text-center text-xs text-slate-400/80">
+          Version 1.0
+        </div>
       </div>
     </aside>
   );
